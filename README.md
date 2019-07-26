@@ -4,8 +4,57 @@ Collection of code used by the Open Science team at VLIZ
 Each file has:
 * purpose
 * input
-* output
+* output : (if file contains ammount fields #)
 * Author
-* Date
+* Date of creation (DOC)
 * Requirements
-* Project for which file was created for
+* Project for which file was created for (PCF) 
+
+# Summary of files:
+
+
+Assemble+ Scripts:
+    => assembleplus_Emodneteurobis_checker.py:
+        * purpose      : To check if the datasets that are present in Assemble+ are also present in Emodnet or eurobis.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : textfile named info_eurobis_emodnet_assembleplus.txt containing 3 fields
+        * Author       : Decruw Cedric
+        * DOC          : Wednesday, ‎July ‎10, ‎2019, ‏‎1:25:49 PM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : Assemble+
+    
+    => assembleplus_publications_analyser.py:
+        * purpose      : To analyse the metadata from the extracted imis databases.
+        * input        : requires the input of the metadatafile of required databases eg: info_metadata__publications_assemble.txt.
+        * output       : textfile named info_asfathesaurusterms_NAME-OF-DATASET.txt containing 2 fields and 
+                         a excelfile named Metadata_publications_scraping_summary_thesaurusterms_NAME-OF-DATASET.xlsx
+        * Author       : Decruw Cedric
+        * DOC          : Monday, ‎July ‎15, ‎2019, ‏‎10:37:03 AM
+        * Requirements : Requires spcols_metadata_extraction_version3.py to be ran.
+        * PCF          : Assemble+
+
+    => assembleplus_vliz_checker.py:
+        * purpose      : To analyse the metadata from the extracted imis databases.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : textfile named metadata_vliz_checker__NAME-OF-DATASET.txt containing 5 fields
+        * Author       : Decruw Cedric
+        * DOC          : Wednesday, ‎July ‎10, ‎2019, ‏‎1:02:43 PM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : Assemble+
+    
+
+
+
+WP2 Related Scripts:
+    => automation_of_fairtest.py
+        * purpose      : To analyse and automise the test of the metadata from assemble+ to determine if the metadata is fair.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : excelsheet named Fairtest_data_database_NAME-OF-DATASET.xlsx and
+                         all the json responses if initial amalysis failed.
+        * Author       : Decruw Cedric
+        * DOC          : ‎Friday, ‎July ‎12, ‎2019, ‏‎10:52:04 AM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : WP2
+
+Other Scripts:
+    => 

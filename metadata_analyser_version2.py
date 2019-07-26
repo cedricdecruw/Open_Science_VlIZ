@@ -6,14 +6,14 @@ from collections import Counter
 import re
 
 ##############################################         CONFIG         ###################################################
-spcolids = ["27","910","896"] #make array for which i put the spcolids to see if they all are the same (all the same)
-namesdatabases = ["ScheldeMonitor","jerico-_next","Lifewatch"]
-savefolder="C:\\Users\\cedricd\\Documents\\Pre_upload_folder\\temp_files_screening_databases\\" #here you define your folder in which you would like to save your documents
+spcolids = ["952"] #make array for which i put the spcolids to see if they all are the same (all the same) "27","910","896",
+namesdatabases = ["Assembleplus"] #"ScheldeMonitor","jerico-_next","Lifewatch",
+savefolder="S:\\datac\\Projects\\AssemblePlus\\NA2_DataAccess\\Development4AssemblePCollection\\" #here you define your folder in which you would like to save your documents
 
 ##########################################################################################################################
 ###############################   Making summary excelsheets/txt-files with calculations   ###############################
 ##########################################################################################################################
-
+'''
 ##########################################################################################################################
 totaal=40000
 step=5000
@@ -43,9 +43,10 @@ for record in superiorrecord:
         print()
         
 f.close() 
-
+'''
 #######################################    start with keywords and themes:    ############################################
 for names in namesdatabases:
+
     workbook = xlsxwriter.Workbook('Metadata_scraping_summary_themes_keywords_'+names+'.xlsx')
     bold = workbook.add_format({'bold': True})
     worksheetarh = workbook.add_worksheet("archive_summary")
@@ -100,7 +101,7 @@ for names in namesdatabases:
                     else:
                         #get rid of ''
                         info= info.replace("'", "")
-                        info= info.replace(" ", "")
+                        info= re.sub(r"\s+", "", info)
                         info= info.replace("\t", "")
                         dephsplit = info.split(">")
                         dephnumber = len(dephsplit)
@@ -179,7 +180,6 @@ for names in namesdatabases:
 
     workbook.close()   
 
-
     #make csv file for sunburst chart in viewer
     allinfo=[]
     parentchild={}
@@ -189,9 +189,10 @@ for names in namesdatabases:
         i= i.replace("]", "")
         i= i.replace("'", "")
         i= i.replace("-", "_")
-        i= i.replace(" ", "")
         i= i.replace(">", "-")
         i= i.replace("\t", "")
+        #delete leading spaces
+        i=re.sub(r"\s+", "", i)
         #split each line into individual data
         lineinfo = i.split(",")
         for info in lineinfo:
@@ -221,10 +222,10 @@ for names in namesdatabases:
                     childpart = childsplit[0]+"-"+childsplit[1]+"-"+childsplit[2]+"-"+childsplit[3]+"-"+childsplit[4]
                     allinfo.append(childpart)
                 x+=1
-                childpart=childpart.replace(" ","")
+                #childpart=childpart.replace(" ","")
                 childpart=childpart.replace("\t","")
                 parentpart=parentpart.replace(" ","")
-                parentpart=parentpart.replace("\t","")
+                #parentpart=parentpart.replace("\t","")
                 parentchild[childpart]=parentpart
                 
     for x,y in parentchild.items():
@@ -248,11 +249,44 @@ for names in namesdatabases:
     for x, y in countallinfo.items():
         #make labels by breaking down x
         info = x.split("-")
-        label = info[len(info)-1]
-        line = ','.join([str(x),str(y[0]),str(y[1]),str(label)])
-        f.write(line + "\n") 
-    f.close()
+        lastword = info[len(info)-1]
+        searchkeywords = lastword.split("_")
+        #clean up keywords so i don't have to do that in R
+        blabla=0
+        for i in searchkeywords:  
+            i=i.replace("(","")
+            i=i.replace(")","")
+            i=i.replace("e.g."," ")
+            i=i.replace("&"," ")
+            i=i.replace("/"," ")
+            #i splitsen op spatie om errors te voorkomen
+            kek = i.split(" ")
+            i = kek[0]
+            if blabla == 0:
+                searchterms= i
+                stjson = i
+                blabla+=1
+            else:
+                searchterms=searchterms+"+"+i
+                stjson = stjson+"%20"+i
+        golink = "http://www.assembleplus.eu/datasetsearch?ktpKO=169548&imisfpspcol=990&Field="+searchterms+"&year=&bentaut=#vlizimisfp"
+        #use link to get real info of biology file info 
+        print(stjson)
+        with urllib.request.urlopen("http://www.assembleplus.eu/node/2047?show=jsonportal&cnt=1&module=dataset&count=50&Field="+stjson+"&spcol=990") as url:
+            data = json.loads(url.read().decode())
+            count = data["cnt"]
+            if count == 0:
+                count = 1
 
+
+        
+        
+        label = "<b><a href='"+golink+"'>"+lastword+"</a></b>"
+        line = ','.join([str(x),str(count),str(y[1]),str(label)])
+        f.write(line + "\n") 
+        time.sleep(0.3)
+    f.close()
+'''
 #######################################           taxonomic info:           ############################################
     ArchivesIDskeywordsnon=[]
     ArchivesIDsAphianon=[]
@@ -503,3 +537,235 @@ for names in namesdatabases:
                 print("code error for contactid {}".format(i)) 
 
     f.close()
+
+############################################## date extractor of datasets ##############################################
+#put back tab when puttting back for all databases 
+with open(savefolder+"info_metadata_"+names+".txt") as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter="|")
+    line_count = 1
+    #make variables
+    begindate =[]
+    enddate = []
+    archiveids=[]
+    for row in csv_reader:
+        if line_count == 0:
+            print(f'Column names are {", ".join(row)}')
+            line_count += 1
+        else:
+            line_count+=1
+            archiveids.append(row[6])
+            begindate.append(row[13]) 
+            enddate.append(row[14])
+    
+    #extract beginyear endyear and total time investigation
+    #clean up data
+    beginyears =[]
+    tofillindatestart=0
+    for date in begindate:
+        date = date.replace("[","") 
+        date = date.replace("]","") 
+        #split date into multiple if any 
+        stn_split = date.split(',')
+        x=0
+        for i in stn_split:
+            if x ==0:
+                begindateproject = i
+                x+=1
+        #dissect date
+        begindateproject = begindateproject.replace("'","") 
+        if begindateproject == "NA":
+            tofillindatestart = "Not known"
+        else:
+            stn_split = begindateproject.split('-')
+            x=0
+            for i in stn_split:
+                if x ==0:
+                    tofillindatestart = i
+                    x+=1
+        beginyears.append(tofillindatestart)
+    #same for enddate
+    endyears=[]
+    tofillindateend=0
+    for date in enddate:
+        date = date.replace("[","") 
+        date = date.replace("]","") 
+        #split date into multiple if any 
+        stn_split = date.split(',')
+        x=0
+        for i in stn_split:
+            if x ==0:
+                begindateproject = i
+                x+=1
+        
+        
+        #dissect date
+        if begindateproject == "None":
+            tofillindateend="None"
+        else:
+            begindateproject = begindateproject.replace("'","") 
+            if begindateproject == "NA":
+                tofillindateend = "Not known"
+            else:
+                stn_split = begindateproject.split('-')
+                x=0
+                for i in stn_split:
+                    if x == (len(stn_split)-3):
+                        tofillindateend = i
+                    x+=1
+        endyears.append(tofillindateend)
+
+    #make runtime dates
+    runtimedatasets=[]
+    x=0
+    for i in endyears:
+        try:
+            runtime = int(i)-int(beginyears[x])
+            runtimedatasets.append(runtime)
+        except ValueError:
+            runtimedatasets.append("Not known")
+        x+=1
+    
+    #make file to put info in 
+    f= open(savefolder+"info_runtime_in_datasets.txt","w+")  
+    f.write("DasID,beginyear,endyear,runtime\n") 
+    x=0
+    for i in endyears:
+        f.write(archiveids[x]+","+str(beginyears[x])+","+str(i)+","+str(runtimedatasets[x])+"\n")
+        x+=1
+    f.close()
+    
+############################################### make the coordinates file ##########################################
+    #make file 
+    f= open(savefolder+"info_coordinates_"+testdatabase+".txt","w+")
+    f.write("DasID!document type!extension!region!lat!long!popup\n")
+    with open(savefolder+"info_metadata_"+names+".txt") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter="|")
+        line_count = 1
+        #make the variables 
+        archiveids = []
+        geolocation = []
+        urlsofdata = []
+        geoids=[]
+        reallinkdata=[]
+        for row in csv_reader:
+            if line_count == 0:
+                print(f'Column names are {", ".join(row)}')
+                line_count += 1
+            else:
+                #get info here Dasthemes,dasthemeids,Keywords,dataornot,urllink,urlIDs,ids
+                geolocation.append(row[16])
+                urlsofdata.append(row[3])
+                archiveids.append(row[6])
+                geoids.append(row[23])
+                reallinkdata.append(row[4])
+                line_count += 1
+        #split geloaction on '
+        x=0
+        for geo in geolocation:
+            geoidarh = geoids[x]
+            reallink = reallinkdata[x]
+            indgeoid = []
+            localareas = []
+            coordinates = {}
+            document_name = []
+            idarchive = archiveids[x]
+            url = urlsofdata[x]
+            coordinateslong = []
+            coordinateslat = []
+            typedoc = []
+            actuallink=[]
+            reallink = reallink.replace("[","")
+            reallink = reallink.replace("]","")
+            reallink = reallink.replace(" ","")
+            reallink = reallink.replace("'","")
+            fucklinks = reallink.split(",")
+            for real in fucklinks:
+                actuallink.append(real)
+                print(real)
+            locations = geo.split("'")
+            for locs in locations:
+                if locs != "[" and locs != "]" and locs != " ," and locs!= ", ":
+                    localareas.append(locs)
+                    #print(locs)
+            geoidarh = geoidarh.replace("[","")
+            geoidarh = geoidarh.replace("]","")
+            geoidarh = geoidarh.replace(" ","")
+            locations = geoidarh.split(",")
+            for locs in locations:
+                indgeoid.append(locs)
+            url = url.replace("[","")
+            url = url.replace("]","")
+            url = url.replace("'","")
+            indivurls = url.split(",")
+            ba=0
+            for iurl in indivurls:
+                try:
+                    golink = actuallink[ba]
+                except IndexError:
+                    pass
+                popuptext = ""
+                if iurl != "NA" and iurl != "None" and iurl != " None" and iurl != "None ":
+                    #foreach indgeoid get long and lat
+                    z=0
+                    for i in indgeoid:
+                        if i != "None" and i !="":
+                            with urllib.request.urlopen("http://www.marineregions.org/rest/getGazetteerRecordByMRGID.json/"+str(i)+"/") as urlp:
+                                data = json.loads(urlp.read().decode())
+                                coordinates[localareas[z]]=[data["longitude"],data["latitude"]]
+                                #coordinateslat.append(data["latitude"]) 
+                                #coordinateslong.append(data["longitude"])
+                                time.sleep(0.3)
+                        else:
+                            #coordinateslat.append("NA") 
+                            #coordinateslong.append("NA")
+                            coordinates[localareas[z]]=["NA","NA"]
+                    #get extension
+                    iurlsplit = iurl.split(".")
+                    try:
+                        extension = iurlsplit[1]
+                        extension= extension.replace(" ","")
+                    except IndexError:
+                        extension = iurl
+                        pass
+                        #print(extension)
+                    #define the category based on the extension
+                    test=0
+                    if extension == "xls" or extension == "xlsx":
+                            typedoc.append("Spreadsheet")
+                            test=1
+                    if "doc" in extension:
+                        typedoc.append("Word-document")
+                        test=1
+                    if "rar" in extension or "zip" in extension:
+                        typedoc.append("compressed")
+                        test=1
+                    if "mdb" in extension:
+                        typedoc.append("Microsoft database")
+                        test=1
+                    if "BAK" in extension:
+                        typedoc.append("Backup file")
+                        test=1
+                    if "wk4" in extension:
+                        typedoc.append("Lotus 4 Worksheet")
+                        test=1
+                    if test != 1:
+                        typedoc.append("others")
+
+                    #make popupbox text
+                    popuptext = "<b><a href='"+golink+"'>"+iurl+"</a></b><br/><b>Dataset: "+str(archiveids[x])+"</b>"
+                    
+                    #put everything together in a line 
+                    for target,co in coordinates.items():
+                        for doc in typedoc:
+                            try:
+                                line = str(archiveids[x])+"! "+doc+"! "+extension+"! "+target+"! "+str(co[0])+"! "+str(co[1])+"! "+popuptext
+                            except IndexError:
+                                pass
+                            print(line)
+                            f.write(line+"\n")
+                    z+=1
+                ba+=1
+            x+=1
+
+    f.close()
+'''

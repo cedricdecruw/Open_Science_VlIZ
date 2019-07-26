@@ -7,8 +7,6 @@ from collections import Counter
 import re
 
 #config
-
-
 f= open("C:\\Users\\cedricd\\Documents\\Pre_upload_folder\\temp_files_screening_databases\\info_eurobis_emodnet_assembleplus.txt","w+")
 f.write("DasID,present EurOBIS,present EMODNET")
 ############################

@@ -21,7 +21,7 @@ for names in namesdatabases:
     bold = workbook.add_format({'bold': True})
     worksheetarh = workbook.add_worksheet("thesaurusterms_keywords_summary")
     #make file so that raw info can be used to make changes 
-    with open(savefolder+"info_metadata__publications"+names+".txt") as csv_file:
+    with open(savefolder+"info_metadata__publications_"+names+".txt") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter="|")
         line_count = 1
         #make the variables 
