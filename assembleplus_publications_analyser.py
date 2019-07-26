@@ -81,10 +81,14 @@ for names in namesdatabases:
 
         row = 1
         col = 4 
+        #make txt file of the asfa thesaurusterms
+        f= open(savefolder+"info_asfathesaurusterms_"+names+".txt","w+")
+        f.write("term,count\n")
         for x, y in countdiffernetkeywords.items():
+            f.write(str(x)+","+str(y)+"\n")
             worksheetarh.write(row, col,     x)
             worksheetarh.write(row, col + 1, y)
             row += 1
-        
+    f.close()
     workbook.close()   
 

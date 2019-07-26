@@ -12,13 +12,13 @@ import re
 
 
 #config
-spcolids = ["27","910","896"] #make array for which i put the spcolids to see if they all are the same (all the same)
-namesdatabases = ["ScheldeMonitor","jerico-_next","Lifewatch"]
+spcolids = ["952"] #make array for which i put the spcolids to see if they all are the same (all the same) "27","910","896",
+namesdatabases = ["Assembleplus"] #"ScheldeMonitor","jerico-_next","Lifewatch",
 totaal=10000
 step=5000
 nameolol=0
 #here you define your folder in which you would like to save your documents
-savefolder="C:\\Users\\cedricd\\Documents\\Pre_upload_folder\\temp_files_screening_databases\\"
+savefolder="S:\\datac\\Projects\\AssemblePlus\\NA2_DataAccess\\Development4AssemblePCollection\\"
 ##########################################################################################################################
 for spcolid in spcolids:
     #make worksheet
@@ -48,8 +48,10 @@ for spcolid in spcolids:
     worksheet.write('S1', 'Title Archive', bold)
     worksheet.write('T1', 'Citations', bold)
     worksheet.write('U1', 'person_ids', bold)
-
-
+    worksheet.write('V1', 'Acronyms', bold)
+    worksheet.write('W1', 'RoleID', bold)
+    worksheet.write('X1', 'geoID', bold)
+    worksheet.write('Z1', 'spcols', bold)
 
     row = 1
     col = 0
@@ -71,7 +73,7 @@ for spcolid in spcolids:
                 
     
     for ids in DasIDs:
-        with urllib.request.urlopen("http://www.vliz.be/imis?module=dataset&show=json&dasid="+str(ids)) as url:
+        with urllib.request.urlopen("http://www.vliz.be/en/imis?module=dataset&show=json&dasid="+str(ids)) as url:
             data = json.loads(url.read().decode())
             #extract data
             Dasthemes = []
@@ -94,6 +96,10 @@ for spcolid in spcolids:
             title=[]
             citation=[]
             persids=[]
+            acronyms=[]
+            roleids=[]
+            geoid=[]
+            spcol=[]
             #print(json.dumps(data, indent=4, sort_keys=True))
             try:
                 dasthemes = data["dasthemes"]
@@ -131,6 +137,16 @@ for spcolid in spcolids:
                 mparameterd = data["meastypes"]
             except KeyError:
                 mparameterd = ["NA"]
+            try:
+                spcolers = data["spcols"]
+            except KeyError:
+                spcolers = ["NA"]
+                
+            try:
+                for colers in spcolers:
+                    spcol.append(colers["SpName"])
+            except:
+                spcol.append("NA")
             
             try:
                 for theme in dasthemes:
@@ -166,6 +182,9 @@ for spcolid in spcolids:
                     firstname.append(shiprecs["Firstname"])
                     Role.append(shiprecs["Role"])
                     persids.append(shiprecs["PersID"])
+                    acronyms.append(shiprecs["Acronym"])
+                    roleids.append(shiprecs["RoleID"])
+                    
             except:
                 surname.append("NA")
                 firstname.append("NA")
@@ -192,6 +211,7 @@ for spcolid in spcolids:
             try:
                 for geos in geodata:
                     geoterm.append(geos["GeoTerm"])
+                    geoid.append(geos["GeoObjectID"])
             except:
                 geoterm.append("NA")
             #measurements
@@ -213,7 +233,7 @@ for spcolid in spcolids:
             
             #dump all arrays into superior array
             record = []
-            record.extend([Dasthemes,dasthemeids,Keywords,dataornot,urllink,urlIDs,ids,access,surname,firstname,Role,termtax,aphiaIDterm,tempbd,temped,temporald,geoterm,measpara,title,citation,persids])
+            record.extend([Dasthemes,dasthemeids,Keywords,dataornot,urllink,urlIDs,ids,access,surname,firstname,Role,termtax,aphiaIDterm,tempbd,temped,temporald,geoterm,measpara,title,citation,persids,acronyms,roleids,geoid,spcol])
             #record.extend([Dasthemes,dasthemeids,Keywords,dataornot,urllink,urlIDs,DasIDs[row-1],access,surname,firstname,Role,termtax,aphiaIDterm,tempbd,temped,temporald,geoterm,measpara])
             worksheet.write(row, col,     record[6])
             worksheet.write(row, col + 1, str(record[5]))
@@ -236,9 +256,14 @@ for spcolid in spcolids:
             worksheet.write(row, col + 18, str(record[18]))
             worksheet.write(row, col + 19, str(record[19]))
             worksheet.write(row, col + 20, str(record[20]))
+            worksheet.write(row, col + 21, str(record[21]))
+            worksheet.write(row, col + 22, str(record[22]))
+            worksheet.write(row, col + 23, str(record[23]))
+            worksheet.write(row, col + 24, str(record[24]))
             row += 1
             superiorrecord.append(record)
             time.sleep(0.2)
+            print(Dasthemes)
             print("{}/{} archives done of dataset {} out of {} == dataset: {}\n".format(row-1,len(DasIDs),nameolol+1,len(spcolids),namesdatabases[nameolol]))
 
     #do tests to see if themes recur, same with keywords , and see if any of the urls lead to a file with the data itself
