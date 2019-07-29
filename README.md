@@ -13,7 +13,8 @@ Each file has:
 # Summary of files:
 
 
-Assemble+ Scripts:
+##Assemble+ Scripts:
+
     => assembleplus_Emodneteurobis_checker.py:
         * purpose      : To check if the datasets that are present in Assemble+ are also present in Emodnet or eurobis.
         * input        : no fileinput required , info is gathered from url-response.
@@ -72,7 +73,8 @@ Assemble+ Scripts:
 
 
 
-WP2 Related Scripts:
+##WP2 Related Scripts:
+
     => automation_of_fairtest.py
         * purpose      : To analyse and automise the test of the metadata from assemble+ to determine if the metadata is fair.
         * input        : no fileinput required , info is gathered from url-response.
@@ -93,5 +95,12 @@ WP2 Related Scripts:
         * PCF          : WP2
     
 
-Other Scripts:
-    => 
+##Other Scripts:
+    => tussenscript.py
+        * purpose      : Dumpfile for code.
+        * input        : no fileinput required.
+        * output       : no output.
+        * Author       : Decruw Cedric
+        * DOC          : ‎Friday, ‎July ‎5, ‎2019, ‏‎13:52:04 AM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : Others
