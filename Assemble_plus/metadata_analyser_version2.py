@@ -272,14 +272,55 @@ for names in namesdatabases:
             i=i.replace("/"," ")
             #i splitsen op spatie om errors te voorkomen
             kek = i.split(" ")
-            i = kek[0]
-            if blabla == 0:
-                searchterms= i
-                stjson = i
-                blabla+=1
+            if kek[0] == "Watercomposition":
+                searchterms = "Water+composition"
+                stjson = "Water%20composition"
+            elif kek[0] == "Bulkchemistry":
+                searchterms = "Bulk+chemistry"
+                stjson = "Bulk%20chemistry"
+            elif kek[0] == "Pollutionlevels":
+                searchterms = "Pollution"
+                stjson = "Pollution"
+            elif kek[0] == "Environmentalquality":
+                searchterms = "Environmental+quality"
+                stjson = "Environmental%20quality"  
+            elif kek[0] == "Suspendedmatter":
+                searchterms = "Suspended+matter"
+                stjson = "Suspended%20matter"  
+            elif kek[0] == "Upperairobservations":
+                searchterms = "Upper+air+observations"
+                stjson = "Upper%20air%20observations" 
+            elif kek[0] == "Underwateracoustics":
+                searchterms = "Underwater+acoustics"
+                stjson = "Underwater%20acoustics" 
+            elif kek[0] == "Otherinorganicchemistry":
+                searchterms = "Other+inorganic+chemistry"
+                stjson = "Other%20inorganic%20chemistry"   
+            elif kek[0] == "Siteassessments":
+                searchterms = "Site+assessments"
+                stjson = "Site%20assessments"  
+            elif kek[0] == "Coastalstudies":
+                searchterms = "Coastal+studies"
+                stjson = "Coastal%20studies" 
+            elif kek[0] == "Dissolvedgases":
+                searchterms = "Dissolved+gases"
+                stjson = "Dissolved%20gases" 
+            elif kek[0] == "Opticalmeasurements":
+                searchterms = "Optical+measurements"
+                stjson = "Optical%20measurements" 
+            elif kek[0] == "Exploratoryfishing":
+                searchterms = "Exploratory+fishing"
+                stjson = "Exploratory%20fishing"           
             else:
-                searchterms=searchterms+"+"+i
-                stjson = stjson+"%20"+i
+                #put custom input here
+                i = kek[0]
+                if blabla == 0:
+                    searchterms= i
+                    stjson = i
+                    blabla+=1
+                else:
+                    searchterms=searchterms+"+"+i
+                    stjson = stjson+"%20"+i
         golink = "http://www.assembleplus.eu/datasetsearch?ktpKO=169548&imisfpspcol=990&Field="+searchterms+"&year=&bentaut=#vlizimisfp"
         #use link to get real info of biology file info 
         print(stjson)
@@ -287,15 +328,12 @@ for names in namesdatabases:
             data = json.loads(url.read().decode())
             count = data["cnt"]
             if count == 0:
-                count = 1
-
-
-        
-        
-        label = "<b><a href='"+golink+"'>"+lastword+"</a></b>"
-        line = ','.join([str(x),str(count),str(y[1]),str(label)])
-        f.write(line + "\n") 
-        time.sleep(0.3)
+                print("Nothing found for {}".format(searchterms))
+            else:
+                label = "<b><a href='"+golink+"'>"+lastword+"</a></b>"
+                line = ','.join([str(x),str(count),str(y[1]),str(label)])
+                f.write(line + "\n") 
+                time.sleep(0.3)
     f.close()
 '''
 #######################################           taxonomic info:           ############################################
