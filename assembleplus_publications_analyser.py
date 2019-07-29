@@ -5,6 +5,18 @@ import csv
 from collections import Counter
 import re
 
+'''
+=> assembleplus_publications_analyser.py:
+        * purpose      : To analyse the metadata from the extracted imis databases.
+        * input        : requires the input of the metadatafile of required databases eg: info_metadata__publications_assemble.txt.
+        * output       : textfile named info_asfathesaurusterms_NAME-OF-DATASET.txt containing 2 fields and 
+                         a excelfile named Metadata_publications_scraping_summary_thesaurusterms_NAME-OF-DATASET.xlsx
+        * Author       : Decruw Cedric
+        * DOC          : Monday, ‎July ‎15, ‎2019, ‏‎10:37:03 AM
+        * Requirements : Requires spcols_metadata_extraction_version3.py to be ran.
+        * PCF          : Assemble+
+'''
+
 ##############################################         CONFIG         ###################################################
 spcolids = ["951","27","910","896"] #make array for which i put the spcolids to see if they all are the same (all the same)
 namesdatabases = ["Assemblemarine","ScheldeMonitor","jerico-_next","Lifewatch"]

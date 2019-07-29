@@ -5,6 +5,18 @@ import requests
 import numpy 
 import xlsxwriter
 
+'''
+=> automation_of_fairtest.py
+        * purpose      : To analyse and automise the test of the metadata from assemble+ to determine if the metadata is fair.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : excelsheet named Fairtest_data_database_NAME-OF-DATASET.xlsx and
+                         all the json responses if initial amalysis failed.
+        * Author       : Decruw Cedric
+        * DOC          : ‎Friday, ‎July ‎12, ‎2019, ‏‎10:52:04 AM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : WP2
+'''
+
 #config
 contact = "0000-0002-7934-1996"
 organisation ="VLIZ"

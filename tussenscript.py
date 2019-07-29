@@ -5,6 +5,17 @@ import requests
 import numpy 
 import xlsxwriter
 
+'''
+=> tussenscript.py
+        * purpose      : Dumpfile for code.
+        * input        : no fileinput required.
+        * output       : no output.
+        * Author       : Decruw Cedric
+        * DOC          : ‎Friday, ‎July ‎5, ‎2019, ‏‎13:52:04 AM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : Others
+'''
+
 nametests = ["F1: FAIR Metrics Gen2- Unique Identifier","F1: FAIR Metrics Gen2 - Identifier Persistence","F1: FAIR Metrics Gen2 - Data Identifier Persistence",
              "F2: FAIR Metrics Gen2 - Structured Metadata","F2: FAIR Metrics Gen2 - Grounded Metadata","F3: FAIR Metrics Gen2 - Data Identifier Explicitly In Metadata",
              "F3: FAIR Metrics Gen2- Metadata Identifier Explicitly In Metadata","F4: FAIR Metrics Gen2 - Searchable in major search engine",

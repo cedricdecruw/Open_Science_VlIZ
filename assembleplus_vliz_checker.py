@@ -6,6 +6,16 @@ import csv
 from collections import Counter
 import re
 
+'''
+ => assembleplus_vliz_checker.py:
+        * purpose      : To analyse the metadata from the extracted imis databases.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : textfile named metadata_vliz_checker__NAME-OF-DATASET.txt containing 5 fields
+        * Author       : Decruw Cedric
+        * DOC          : Wednesday, ‎July ‎10, ‎2019, ‏‎1:02:43 PM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : Assemble+
+'''
 #config
 insids = ["36","1878","4047","4724","6355","950","717","5204","471"]
 insnames = ["VLIZ","HCMR","HCMR","HCMR","HCMR","AWI","AWI","AWI","UGENT"]

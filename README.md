@@ -42,6 +42,33 @@ Assemble+ Scripts:
         * Requirements : No other scripts are required to have ran before running this script.
         * PCF          : Assemble+
     
+    => email_check_contacts.py:
+        * purpose      : To analyse the contacts that are in given datasets to extract information about people_ids.
+        * input        : requires the input of the metadatafile of required databases eg: info_metadata_NAME-OF-DATASET.txt
+        * output       : textfile named info_contactpersons_in_datasets_NAME-OF-DATASET.txt containing 4 fields
+        * Author       : Decruw Cedric
+        * DOC          : ‎Friday, ‎July ‎5, ‎2019, ‏‎2:18:33 PM
+        * Requirements : Requires spcols_metadata_extraction_version3.py to be ran.
+        * PCF          : Assemble+
+    
+    => metadata_analyser_version2.py:
+        * purpose      : To analyse the metadata gathered from metadata extraction script.
+        * input        : requires the input of the metadatafile of required databases eg: info_metadata_NAME-OF-DATASET.txt
+        * output       : analysis files (contact analysis, geolocation analysis, sunburst.csv file, etc)
+        * Author       : Decruw Cedric
+        * DOC          : ‎Wednesday, ‎July ‎10, ‎2019, ‏‎11:36:52 AM
+        * Requirements : Requires spcols_metadata_extraction_version3.py to be ran.
+        * PCF          : Assemble+
+    
+    => spcols_metadata_extraction_version3.py:
+        * purpose      : To gqther metadata from urls.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : info_metadata_NAME-OF-DATASET.txt with 23 fields and excelfile
+        * Author       : Decruw Cedric
+        * DOC          : ‎‎Wednesday, ‎July ‎10, ‎2019, ‏‎10:11:34 AM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : Assemble+
+    
 
 
 
@@ -55,6 +82,16 @@ WP2 Related Scripts:
         * DOC          : ‎Friday, ‎July ‎12, ‎2019, ‏‎10:52:04 AM
         * Requirements : No other scripts are required to have ran before running this script.
         * PCF          : WP2
+    
+    => Fairtest.py
+        * purpose      : To analyse and automise the test of the metadata from assemble+ to determine if the metadata is fair.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : excelsheet named Fairtest_data_database_NAME-OF-DATASET.xlsx
+        * Author       : Decruw Cedric
+        * DOC          : ‎Monday, ‎July ‎1, ‎2019, ‏‎3:29:29 PM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : WP2
+    
 
 Other Scripts:
     => 

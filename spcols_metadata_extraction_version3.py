@@ -6,6 +6,17 @@ import csv
 from collections import Counter
 import re
 
+'''
+=> spcols_metadata_extraction_version3.py:
+        * purpose      : To gqther metadata from urls.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : info_metadata_NAME-OF-DATASET.txt with 23 fields and excelfile
+        * Author       : Decruw Cedric
+        * DOC          : ‎‎Wednesday, ‎July ‎10, ‎2019, ‏‎10:11:34 AM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : Assemble+
+'''
+
 ##########################################################################################################################
 #############                       MAKING OF EXCELSHEET WITH RAW EXTRACTED INFO IN IT                       #############   
 ##########################################################################################################################

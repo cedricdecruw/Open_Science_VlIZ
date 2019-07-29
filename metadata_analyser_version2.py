@@ -5,6 +5,17 @@ import csv
 from collections import Counter
 import re
 
+'''
+=> metadata_analyser_version2.py:
+        * purpose      : To analyse the metadata gathered from metadata extraction script.
+        * input        : requires the input of the metadatafile of required databases eg: info_metadata_NAME-OF-DATASET.txt
+        * output       : analysis files (contact analysis, geolocation analysis, sunburst.csv file, etc)
+        * Author       : Decruw Cedric
+        * DOC          : ‎Wednesday, ‎July ‎10, ‎2019, ‏‎11:36:52 AM
+        * Requirements : Requires spcols_metadata_extraction_version3.py to be ran.
+        * PCF          : Assemble+
+'''
+
 ##############################################         CONFIG         ###################################################
 spcolids = ["952"] #make array for which i put the spcolids to see if they all are the same (all the same) "27","910","896",
 namesdatabases = ["Assembleplus"] #"ScheldeMonitor","jerico-_next","Lifewatch",

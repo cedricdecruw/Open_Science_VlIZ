@@ -10,6 +10,18 @@ import xlsxwriter
 import os
 import time
 import numpy as np
+
+'''
+=> Fairtest.py
+        * purpose      : To analyse and automise the test of the metadata from assemble+ to determine if the metadata is fair.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : excelsheet named Fairtest_data_database_NAME-OF-DATASET.xlsx
+        * Author       : Decruw Cedric
+        * DOC          : ‎Monday, ‎July ‎1, ‎2019, ‏‎3:29:29 PM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : WP2
+'''
+
 #config
 
 FAIRCSV = "C:\\Users\\cedricd\\Downloads\\Fairchecking.csv"

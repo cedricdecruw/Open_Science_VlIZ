@@ -5,6 +5,16 @@ import xlsxwriter
 import csv
 from collections import Counter
 import re
+'''
+=> assembleplus_Emodneteurobis_checker.py:
+        * purpose      : To check if the datasets that are present in Assemble+ are also present in Emodnet or eurobis.
+        * input        : no fileinput required , info is gathered from url-response.
+        * output       : textfile named info_eurobis_emodnet_assembleplus.txt containing 3 fields
+        * Author       : Decruw Cedric
+        * DOC          : Wednesday, ‎July ‎10, ‎2019, ‏‎1:25:49 PM
+        * Requirements : No other scripts are required to have ran before running this script.
+        * PCF          : Assemble+
+'''
 
 #config
 f= open("C:\\Users\\cedricd\\Documents\\Pre_upload_folder\\temp_files_screening_databases\\info_eurobis_emodnet_assembleplus.txt","w+")

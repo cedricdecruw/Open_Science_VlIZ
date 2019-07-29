@@ -7,6 +7,17 @@ from collections import Counter
 import re
 import sys
 
+'''
+=> email_check_contacts.py:
+        * purpose      : To analyse the contacts that are in given datasets to extract information about people_ids.
+        * input        : requires the input of the metadatafile of required databases eg: info_metadata_NAME-OF-DATASET.txt
+        * output       : textfile named info_contactpersons_in_datasets_NAME-OF-DATASET.txt containing 4 fields
+        * Author       : Decruw Cedric
+        * DOC          : ‎Friday, ‎July ‎5, ‎2019, ‏‎2:18:33 PM
+        * Requirements : Requires spcols_metadata_extraction_version3.py to be ran.
+        * PCF          : Assemble+
+'''
+
 #variabelen maken voor binnenhalen id info 
 
 totaal=40000
