@@ -8,8 +8,8 @@ import re
 '''
 => assembleplus_publications_analyser.py:
         * purpose      : To analyse the metadata from the extracted imis databases.
-        * input        : requires the input of the metadatafile of required databases eg: info_metadata__publications_assemble.txt.
-        * output       : textfile named info_asfathesaurusterms_NAME-OF-DATASET.txt containing 2 fields and 
+        * input        : requires the input of the metadatafile of required databases eg: info_metadata__publications_assemble2.txt.
+        * output       : textfile named info_asfathesaurusterms_NAME-OF-DATASET2.txt containing 2 fields and 
                          a excelfile named Metadata_publications_scraping_summary_thesaurusterms_NAME-OF-DATASET.xlsx
         * Author       : Decruw Cedric
         * DOC          : Monday, ‎July ‎15, ‎2019, ‏‎10:37:03 AM
@@ -18,22 +18,24 @@ import re
 '''
 
 ##############################################         CONFIG         ###################################################
-spcolids = ["951","27","910","896"] #make array for which i put the spcolids to see if they all are the same (all the same)
-namesdatabases = ["Assemblemarine","ScheldeMonitor","jerico-_next","Lifewatch"]
-savefolder="C:\\Users\\cedricd\\Documents\\Pre_upload_folder\\temp_files_screening_databases\\" #here you define your folder in which you would like to save your documents
+spcolids = ["951"] #make array for which i put the spcolids to see if they all are the same (all the same) ,"27","910","896"
+namesdatabases = ["Assemblemarine"] #,"ScheldeMonitor","jerico-_next","Lifewatch"
+savefolder="S:\\datac\\Projects\\AssemblePlus\\NA2_DataAccess\\Development4AssemblePCollection\\" #here you define your folder in which you would like to save your documents
 
+################################### cleanup of the dasids ###############################################################
+for names in namesdatabases:
 ##########################################################################################################################
 ###############################   Making summary excelsheets/txt-files with calculations   ###############################
 ##########################################################################################################################
 
 ##########################################################################################################################
 #######################################    start with keywords and themes:    ############################################
-for names in namesdatabases:
+
     workbook = xlsxwriter.Workbook('Metadata_publications_scraping_summary_thesaurusterms_'+names+'.xlsx')
     bold = workbook.add_format({'bold': True})
     worksheetarh = workbook.add_worksheet("thesaurusterms_keywords_summary")
     #make file so that raw info can be used to make changes 
-    with open(savefolder+"info_metadata__publications_"+names+".txt") as csv_file:
+    with open(savefolder+"info_metadata__publications"+names+"2.txt") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter="|")
         line_count = 1
         #make the variables 

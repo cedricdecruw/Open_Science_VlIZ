@@ -726,7 +726,7 @@ with open(savefolder+"info_metadata_"+names+"2.txt") as csv_file:
     
 ############################################### make the coordinates file ##########################################
     #make file 
-    f= open(savefolder+"info_coordinates_"+testdatabase+".txt","w+")
+    f= open(savefolder+"info_coordinates_"+names+".txt","w+")
     f.write("DasID!document type!extension!region!lat!long!popup\n")
     with open(savefolder+"info_metadata_"+names+"2.txt") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter="|")
