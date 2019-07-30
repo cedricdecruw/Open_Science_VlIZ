@@ -8,7 +8,7 @@ import re
 '''
 => metadata_analyser_version2.py:
         * purpose      : To analyse the metadata gathered from metadata extraction script.
-        * input        : requires the input of the metadatafile of required databases eg: info_metadata_NAME-OF-DATASET.txt
+        * input        : requires the input of the metadatafile of required databases eg: info_metadata_NAME-OF-DATASET2.txt
         * output       : analysis files (contact analysis, geolocation analysis, sunburst.csv file, etc)
         * Author       : Decruw Cedric
         * DOC          : ‎Wednesday, ‎July ‎10, ‎2019, ‏‎11:36:52 AM
@@ -55,15 +55,56 @@ for record in superiorrecord:
         
 f.close() 
 '''
-#######################################    start with keywords and themes:    ############################################
+##########################################################################################################################
+###############################   delete dasids from metadata for better representation    ###############################
+##########################################################################################################################
 for names in namesdatabases:
+
+    with open(savefolder+"Dasids_to_delete.csv") as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=",")
+        line_count = 1
+        dasidstodelete = []
+        for row in csv_reader:
+            if line_count == 0:
+                print(f'Column names are {", ".join(row)}')
+                line_count += 1
+            else:
+                dasidstodelete.append(row[0])
+                line_count += 1
+        csv_file.close()
+
+    with open(savefolder+"info_metadata_"+names+".txt") as csv_file, open(savefolder+"info_metadata_"+names+"2.txt","w+") as out:
+        csv_reader = csv.reader(csv_file, delimiter="|")
+        line_count = 1
+        for row in csv_reader:
+            if line_count == 0:
+                print(f'Column names are {", ".join(row)}')
+                line_count += 1
+            else:
+                test = 0
+                dasids = row[6]
+                for i in dasidstodelete:
+                    if i == dasids:
+                        print("deleted archive {} from file".format(dasids))
+                        test = 1
+                if test == 0:
+                    line = '|'.join([str(i) for i in row])  
+                    try:
+                        out.write(line + "\n") 
+                    except UnicodeEncodeError:
+                        print("Unicode Encode Error")                
+                line_count += 1
+        csv_file.close()
+        out.close()
+
+#######################################    start with keywords and themes:    ############################################
 
     workbook = xlsxwriter.Workbook('Metadata_scraping_summary_themes_keywords_'+names+'.xlsx')
     bold = workbook.add_format({'bold': True})
     worksheetarh = workbook.add_worksheet("archive_summary")
     worksheetcount = workbook.add_worksheet("count_summary_theme_keywords")
     #make file so that raw info can be used to make changes 
-    with open(savefolder+"info_metadata_"+names+".txt") as csv_file:
+    with open(savefolder+"info_metadata_"+names+"2.txt") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter="|")
         line_count = 1
         #make the variables 
@@ -335,11 +376,11 @@ for names in namesdatabases:
                 f.write(line + "\n") 
                 time.sleep(0.3)
     f.close()
-'''
+
 #######################################           taxonomic info:           ############################################
     ArchivesIDskeywordsnon=[]
     ArchivesIDsAphianon=[]
-    with open(savefolder+"info_metadata_"+names+".txt") as csv_file:
+    with open(savefolder+"info_metadata_"+names+"2.txt") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter="|")
         line_count = 1
         #make variables
@@ -428,7 +469,7 @@ for names in namesdatabases:
     
 #######################################           email info:           ############################################
 
-    with open(savefolder+"info_metadata_"+names+".txt") as csv_file:
+    with open(savefolder+"info_metadata_"+names+"2.txt") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter="|")
         line_count = 1
         #make variables
@@ -589,7 +630,7 @@ for names in namesdatabases:
 
 ############################################## date extractor of datasets ##############################################
 #put back tab when puttting back for all databases 
-with open(savefolder+"info_metadata_"+names+".txt") as csv_file:
+with open(savefolder+"info_metadata_"+names+"2.txt") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter="|")
     line_count = 1
     #make variables
@@ -687,7 +728,7 @@ with open(savefolder+"info_metadata_"+names+".txt") as csv_file:
     #make file 
     f= open(savefolder+"info_coordinates_"+testdatabase+".txt","w+")
     f.write("DasID!document type!extension!region!lat!long!popup\n")
-    with open(savefolder+"info_metadata_"+names+".txt") as csv_file:
+    with open(savefolder+"info_metadata_"+names+"2.txt") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter="|")
         line_count = 1
         #make the variables 
@@ -817,4 +858,3 @@ with open(savefolder+"info_metadata_"+names+".txt") as csv_file:
             x+=1
 
     f.close()
-'''
